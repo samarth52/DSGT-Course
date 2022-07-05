@@ -21,8 +21,9 @@ def perform_train_test_split():
     """
     Perform a train/test split. Return a tuple in the format (X_train, X_test, Y_train, Y_test)
     """
-    #YOUR CODE HERE
-    pass
+    X = df.drop(columns=['target'])
+    y = df['target']
+    return tuple(train_test_split(X, y, test_size=0.2, shuffle=True))
 
 def instantiate_models():
     """
@@ -32,10 +33,10 @@ def instantiate_models():
     Fill in the blanks as shown
     """
     #YOUR CODE HERE
-    svm = ____
-    dt = _____
-    mlp = ______
-    knn = ______
+    svm = SVC(kernel="linear")
+    dt = DecisionTreeClassifier(max_depth=8)
+    mlp = MLPClassifier()
+    knn = KNeighborsClassifier()
     return (svm, dt, mlp, knn)
 
 def fit_models():
@@ -46,10 +47,10 @@ def fit_models():
     """
     svm, dt, mlp, knn = instantiate_models()
     X_train, X_test, Y_train, Y_test = perform_train_test_split()
-    svm.____(_________)
-    dt.____(__________)
-    mlp.____(_________)
-    knn.____(_________)
+    svm.fit(X_train, Y_train)
+    dt.fit(X_train, Y_train)
+    mlp.fit(X_train, Y_train)
+    knn.fit(X_train, Y_train)
     return (svm, dt, mlp, knn) #return fitted models
 
 
@@ -68,15 +69,17 @@ def accuracy_at_least_90():
     """
     X_train, X_test, Y_train, Y_test = perform_train_test_split()
     
-    svm, dt, mlp, knn = _______________
+    svm, dt, mlp, knn = instantiate_models()
     
-    model = ________ #put your chosen model here
+    model = svm #put your chosen model here
     
-    ______._____(__________) #once you pick a model, what do you need to do to train it?
+    model.fit(X_train, Y_train) #once you pick a model, what do you need to do to train it?
     
-    _____ = ______._____(______) #once you fit a model, how do you predict
+    Y_pred = model.predict(X_test) #once you fit a model, how do you predict
     
-    return ______________ #Return tuple format (model, accuracy). Look at sklearn.metrics to see how to calculate accuracy
+    return (model, accuracy_score(Y_test, Y_pred)) #Return tuple format (model, accuracy). Look at sklearn.metrics to see how to calculate accuracy
     
     
-    
+print(get_iris_dataset())
+print(perform_train_test_split())
+print(accuracy_at_least_90())
